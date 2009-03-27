@@ -1,9 +1,9 @@
-#include "indri/IndexEnvironment.hpp"
 #include "CXX/Extensions.hxx"
+#include "lemur_index_environment.h"
  
 class pymer_index_environment: public Py::PythonExtension<pymer_index_environment> {
 private:
-  indri::api::IndexEnvironment *index;
+  lemur_index_environment *index;
 public:
   pymer_index_environment() : index() {};
   virtual ~pymer_index_environment();

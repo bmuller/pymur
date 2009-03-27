@@ -11,8 +11,8 @@ void pymer_index_environment::init_type() {
 }
 
 pymer_index_environment::~pymer_index_environment() {
-  index->close();
-
+  // will close
+  delete index;
 };
 
 Py::Object pymer_index_environment::create(const Py::Tuple &rargs) {
