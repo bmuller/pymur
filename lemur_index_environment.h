@@ -7,6 +7,6 @@ private:
   indri::api::IndexEnvironment *index;
 public:
   lemur_index_environment() : index() {};
-  virtual ~pymer_index_environment();
+  virtual ~lemur_index_environment();
   void create(string location);
 };

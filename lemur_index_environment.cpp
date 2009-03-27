@@ -7,5 +7,5 @@ lemur_index_environment::~lemur_index_environment() {
 };
 
 void lemur_index_environment::create(string location) {
-  index.create(location.c_str());
+  index->create(location.c_str());
 };
