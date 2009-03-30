@@ -2,13 +2,13 @@
 #include "CXX/Objects.hxx"
 #include "CXX/Extensions.hxx"
 
-#include "index_environment.h"
+#include "index.h"
 
 class pymer_module : public Py::ExtensionModule<pymer_module> {
 public:
   pymer_module() : Py::ExtensionModule<pymer_module>("pymer") {
-    pymer_index_environment::init_type();
-    add_varargs_method("IndexEnvironment", &pymer_module::new_index_environment, "create a new indri IndexEnvironment");
+    pymer_index::init_type();
+    add_varargs_method("Index", &pymer_module::new_index, "create a new indri Index object");
 
     initialize("a python interface to the lemur toolkit");
     Py::Dict d(moduleDictionary());
@@ -17,8 +17,15 @@ public:
 
   virtual ~pymer_module() {};
 
-  Py::Object new_index_environment(const Py::Tuple &rargs) {
-    return Py::asObject(new pymer_index_environment());
+  Py::Object new_index(const Py::Tuple &rargs) {
+    if (rargs.length() != 1)
+      throw Py::RuntimeError("Index takes a single constructor argument of the location of the index");
+ 
+    if (!rargs[0].isString())
+      throw Py::TypeError("Index constructor takes one string");
+
+    Py::String location(rargs[0]);
+    return Py::asObject(new pymer_index(location.as_std_string()));
   }
 };
 

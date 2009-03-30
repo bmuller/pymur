@@ -1,4 +1,9 @@
+#include "CXX/Objects.hxx"
+
 #include "index.h"
+
+
+using namespace std;
 
 // example http://lemur.wiki.sourceforge.net/Example+Applications+in+CPlusPlus
  
@@ -9,38 +14,25 @@ void pymer_index::init_type() {
   //behaviors().supportGetattr();
   behaviors().supportSequenceType();
 
-  //add_varargs_method("create", &pymer_index_environment::create, "create(<index location>)");
-  //add_varargs_method("open", &pymer_index_environment::open, "open(<index location>)");
+  add_varargs_method("docCount", &pymer_index::docCount, "docCount() <- Number of documents in index");
 }
+
+pymer_index::pymer_index(string location) {
+  index = IndexManager::openIndex(location);
+};
 
 pymer_index::~pymer_index() {
   delete index;
 };
 
-Py::Object pymer_index::create(const Py::Tuple &rargs) {
-  if (rargs.length() != 1)
-    throw Py::RuntimeError("Incorrect # of args.");
+Py::Object pymer_index::docCount(const Py::Tuple &rargs) {
+  if (rargs.length() != 0)
+    throw Py::RuntimeError("docCount does not take any arguments.");
 
-  if (!rargs[0].isString())
-    throw Py::TypeError("create takes one string");
-
-  Py::String location(rargs[0]);
-  index->create(location.as_std_string());
-  return Py::None();
+  Py::Int result = index->docCount();
+  return result;
 };
 
-Py::Object pymer_index_environment::open(const Py::Tuple &rargs) {
-  if (rargs.length() != 1)
-    throw Py::RuntimeError("Incorrect # of args.");
-
-  if (!rargs[0].isString())
-    throw Py::TypeError("open takes one string");
-
-  Py::String location(rargs[0]);
-  index->open(location.as_std_string());
-  return Py::None();
-};
-
-Py::Object pymer_index_environment::repr() {
-  return Py::String("an indri IndexEnvironment");
+Py::Object pymer_index::repr() {
+  return Py::String("an indri Index");
 }

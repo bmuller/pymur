@@ -1,15 +1,18 @@
 #include "CXX/Extensions.hxx"
-#include "lemur_index_environment.h"
- 
-class pymer_index_environment: public Py::PythonExtension<pymer_index_environment> {
+#include "Index.hpp"
+#include "IndexManager.hpp"
+
+using namespace std;
+using namespace lemur::api;
+
+class pymer_index: public Py::PythonExtension<pymer_index> {
 private:
-  lemur_index_environment *index;
+  Index *index;
 public:
-  pymer_index_environment() : index() {};
-  virtual ~pymer_index_environment();
   static void init_type(void);
-  Py::Object create(const Py::Tuple &);
-  Py::Object open(const Py::Tuple &);
+  pymer_index(string location);
+  virtual ~pymer_index();
+  Py::Object docCount(const Py::Tuple &);
 
   // overwrite PythonExtension methods
   virtual Py::Object repr();
