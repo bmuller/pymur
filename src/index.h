@@ -22,4 +22,5 @@ public:
 
   // overwrite PythonExtension methods
   virtual Py::Object repr();
+  virtual int sequence_length();
 };

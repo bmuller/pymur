@@ -14,24 +14,21 @@ AM_PROG_LIBTOOL
 
 AC_HEADER_STDC
 
-AC_DEFINE([PYCXX_USING_STD_MAP], [1], [Use std::map])
 
-AX_PYTHON
-if test "$ax_python_header" = "no" ; then
-   AC_MSG_ERROR([Could not find python header files.])
-fi
+AC_PYTHON_DEVEL([">='2.4'"])
 
-AX_PYTHON_PACKAGES_DIR
-if test "$py_error" = "yes" ; then
-   AC_MSG_ERROR([Could not determine location of python's site-packages directory.])
-fi
 
 AC_CHECK_HEADER([indri/Index.hpp],,[
    AC_MSG_ERROR([Could not find lemur's header files.])  
 ])
 
-AX_CXX_CHECK_LIB(lemur, [lemur::retrieval::QnList::QnList () const],,[
-   AC_MSG_ERROR([Could not find lemur library.])
+
+AC_MSG_CHECKING([for lemur library])
+AC_LINK_IFELSE([#include <QueryNode.hpp>
+int main() { lemur::retrieval::QnList l(); return 0; }],[
+  AC_MSG_RESULT([yes])
+],[
+  AC_MSG_FAILURE([Could not find the lemur library.])
 ])
 
 
