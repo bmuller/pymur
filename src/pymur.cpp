@@ -26,7 +26,11 @@ public:
       throw Py::TypeError("Index constructor takes one string");
 
     Py::String location(rargs[0]);
-    return Py::asObject(new pymur_index(location.as_std_string()));
+    pymur_index *index = new pymur_index(location.as_std_string());
+    if(!index->loaded) {
+      throw Py::RuntimeError("Could not load index at " + location.as_std_string());
+    }
+    return Py::asObject(index);
   }
 };
 
