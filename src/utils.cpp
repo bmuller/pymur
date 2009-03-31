@@ -5,7 +5,7 @@ using namespace indri::parse;
 
 using namespace std;
 
-void debug(string s) {
+void debug(string msg) {
 #ifdef DEBUG
   string time_s = "";
   time_t rawtime = time(NULL);
@@ -46,4 +46,16 @@ bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, st
       spec->include.push_back(name);
   }
   return result;
+};
+
+void num_to_string(int i, string& s) {
+  char c_int[100];
+  sprintf(c_int, "%ld", i);
+  s = string(c_int);
+};
+
+void num_to_string(double i, string& s) {
+  char c_int[100];
+  sprintf(c_int, "%f", i);
+  s = string(c_int);
 };

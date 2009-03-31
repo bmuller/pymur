@@ -1,6 +1,6 @@
 pkglib_LTLIBRARIES = libpymur.la
 libpymur_la_SOURCES = CXX/cxxsupport.cxx CXX/cxx_extensions.cxx CXX/cxxextensions.c CXX/IndirectPythonInterface.cxx \
-		      index.cpp index_environment.cpp pymur.cpp
+		      argchecker.cpp index.cpp index_environment.cpp utils.cpp pymur.cpp
 noinst_DATA = pymur.so
 
 INCLUDES = -I${PYTHON_INCLUDE_DIR}

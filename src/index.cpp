@@ -38,18 +38,13 @@ pymur_index::~pymur_index() {
 
 
 Py::Object pymur_index::runQuery(const Py::Tuple &rargs) {
+  ArgChecker("runQuery", rargs).param(STRING).oparam(STRING).check();
   IndexedRealVector *results;
   if(rargs.length() == 1) {
-    if (!rargs[0].isString())
-      throw Py::RuntimeError("runQuery takes a string as first argument");
     results = RetMethodManager::runQuery(Py::String(rargs[0]).as_std_string(), index, "okapi");    
-  } else if(rargs.length() == 2) {
-    if (!rargs[0].isString() || !rargs[1].isString())
-      throw Py::RuntimeError("runQuery takes a strings as first and second arguments");
-    results = RetMethodManager::runQuery(Py::String(rargs[0]).as_std_string(), index, Py::String(rargs[1]).as_std_string());    
   } else {
-    throw Py::RuntimeError("runQuery takes one or two arguments");
-  }  
+    results = RetMethodManager::runQuery(Py::String(rargs[0]).as_std_string(), index, Py::String(rargs[1]).as_std_string());    
+  }
 
   Py::List l;
   for (int i=0; i < results->size(); i++) {
@@ -63,8 +58,7 @@ Py::Object pymur_index::runQuery(const Py::Tuple &rargs) {
 };
 
 Py::Object pymur_index::document(const Py::Tuple &rargs) {
-  if(rargs.length() > 2 || rargs.length() < 1 || !rargs[0].isNumeric()) 
-    throw Py::RuntimeError("document(<index>, [<use words>=False]) at least one integer argument");
+  ArgChecker("document", rargs).param(NUMBER).oparam(BOOL).check();
   bool usewords = (rargs.length() == 2 && rargs[1].isTrue());
   int docid = Py::Int(rargs[0]);
   if(docid > index->docCount() || docid == 0)
@@ -88,46 +82,35 @@ Py::Object pymur_index::document(const Py::Tuple &rargs) {
 };
 
 Py::Object pymur_index::docCount(const Py::Tuple &rargs) {
-  if (rargs.length() != 0)
-    throw Py::RuntimeError("docCount does not take any arguments.");
-
+  ArgChecker("docCount", rargs).check();
   Py::Int result = index->docCount();
   return result;
 };
 
 
 Py::Object pymur_index::termCountUnique(const Py::Tuple &rargs) {
-  if (rargs.length() != 0)
-    throw Py::RuntimeError("termCountUnique does not take any arguments.");
-
+  ArgChecker("termCountUnique", rargs).check();
   Py::Int result = index->termCountUnique();
   return result;
 };
 
 Py::Object pymur_index::termCount(const Py::Tuple &rargs) {
+  ArgChecker("termCount", rargs).oparam(NUMBER).check();
   Py::Int result;
   if (rargs.length() == 1) {
     int term = Py::Int(rargs[0]);
     result = index->termCount(term);
   } else if(rargs.length() == 0) {
     result = index->termCount();
-  } else {
-    throw Py::RuntimeError("termCount takes one or no arguments.");
   }
   return result;
 };
 
 Py::Object pymur_index::term(const Py::Tuple &rargs) {
-  if (rargs.length() != 1)
-    throw Py::RuntimeError("term(<termid>) takes one argument.");
-
-  if (!rargs[0].isNumeric())
-    throw Py::TypeError("term(<index>) takes one numerical index argument");
-
+  ArgChecker("term", rargs).param(NUMBER).check();
   Py::Int term(rargs[0]);
   if(term >= index->termCount())
     throw Py::IndexError("term index out of bounds");
-
   return Py::String(index->term(term));
 };
 

@@ -24,3 +24,19 @@ template <class T> bool in_vector(vector<T> things, T thing);
  * @return True if fields were actually added
  */
 bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, string &name);
+
+/** 
+ * Convert an int to a string
+ * 
+ * @param i The int to convert
+ * @param s The string to create
+ */
+void num_to_string(int i, string& s);
+
+/** 
+ * Convert a double to a string
+ * 
+ * @param i The double value to convert
+ * @param s The string to put it in
+ */
+void num_to_string(double i, string& s);
