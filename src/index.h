@@ -1,14 +1,3 @@
-#include "config.h"
-#include "Index.hpp"
-#include "IndexManager.hpp"
-#include "RetMethodManager.hpp"
-#include "IndexedReal.hpp"
-
-#include "Python.h"
-
-#include "CXX/Extensions.hxx"
-#include "CXX/Objects.hxx"
-
 using namespace std;
 using namespace lemur::api;
 

@@ -14,8 +14,28 @@ AM_PROG_LIBTOOL
 
 AC_HEADER_STDC
 
+AC_PYTHON_DEVEL([>='2.4'])
 
-AC_PYTHON_DEVEL([">='2.4'"])
+# provide flag --enable-debug
+AC_ARG_ENABLE(debug, AC_HELP_STRING([[--enable-debug]], [enable debugging output to stdout]),
+[if test "$enableval" = "yes"; then
+    DEBUG="yes"
+    CPPFLAGS="$CPPFLAGS -DDEBUG"
+fi]
+)
+
+
+# option for compiler to be nitpicky about code
+nitpick=false
+AC_ARG_ENABLE([nitpicking],
+ AC_HELP_STRING([--enable-nitpicking],[make compiler somewhat overly fastidious about the code it deals with]),
+ [ test "$enableval" = "no" || nitpick=true ]
+)
+if $nitpick ; then
+ CPP_NITPICK="-Wall -Wextra -Wundef -Wshadow -Wunsafe-loop-optimizations -Wconversion -Wmissing-format-attribute"
+ CPP_NITPICK="$CPP_NITPICK -Wredundant-decls -ansi -Wmissing-noreturn"
+ CPPFLAGS="$CPPFLAGS $CPP_NITPICK"
+fi
 
 
 AC_CHECK_HEADER([indri/Index.hpp],,[
