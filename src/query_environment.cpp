@@ -40,6 +40,9 @@ Py::Object pymur_query_environment::setScoringRules(const Py::Tuple &rargs) {
 
 
 Py::Object pymur_query_environment::runQuery(const Py::Tuple &rargs) {
+  Arg
+    vector<ScoredExtentResult> qResults = env->runQuery(Py::String(rargs[0]).as_std_string(), 
+
   return Py::Sequence();
 };
 
