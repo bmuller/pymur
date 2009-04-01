@@ -6,6 +6,8 @@ class ArgChecker {
   string fname;
   vector<ParamType> params;
   vector<ParamType> oparams;
+  vector<string> params_desc;
+  vector<string> oparams_desc;
   Py::Tuple rargs;
   void strFuncDef(string &s);
   static void paramTypeToString(ParamType t, string &s);
@@ -14,7 +16,7 @@ class ArgChecker {
  public:
   ArgChecker(string _fname, const Py::Tuple &_rargs);
   ~ArgChecker();
-  ArgChecker & param(ParamType t);
-  ArgChecker & oparam(ParamType t);
+  ArgChecker & param(ParamType t, string desc="");
+  ArgChecker & oparam(ParamType t, string desc="");
   void check();
 };

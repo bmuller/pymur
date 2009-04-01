@@ -14,16 +14,18 @@ ArgChecker::~ArgChecker() {
   }
 };
 
-ArgChecker& ArgChecker::oparam(ParamType t) {
+ArgChecker& ArgChecker::param(ParamType t, string desc) {
   params.push_back(t);
+  params_desc.push_back(desc);
+  return (*this);
+};
+
+ArgChecker& ArgChecker::oparam(ParamType t, string desc) {
+  oparams.push_back(t);
+  oparams_desc.push_back(desc);
   return (*this);  
 };
 
-ArgChecker& ArgChecker::param(ParamType t) {
-  params.push_back(t);
-  return (*this);
-};
-  
 void ArgChecker::paramTypeToString(ParamType t, string &s) {
   switch(t) {
   case NUMBER:
@@ -87,7 +89,7 @@ bool ArgChecker::right_type(Py::seqref<Py::Object> obj, ParamType t) {
 };
 
 void ArgChecker::check() {
-  string funcdef, stype, snumber;
+  string funcdef, stype, snumber, error;
   strFuncDef(funcdef);
   checked = true;
 
@@ -100,7 +102,9 @@ void ArgChecker::check() {
     if(!right_type(rargs[i], params[i])) {
       ArgChecker::paramTypeToString(params[i], stype);
       num_to_string(i+1, snumber);
-      throw Py::RuntimeError(funcdef + " takes a " + stype + " for argument " + snumber);
+      error = funcdef + " takes a " + stype + " for argument " + snumber;
+      error = (params_desc[i] != "") ? (error+"; this is "+params_desc[i]) : error;
+      throw Py::RuntimeError(error);
     }
   }
 
@@ -108,7 +112,9 @@ void ArgChecker::check() {
     if(!right_type(rargs[i], oparams[i])) {
       ArgChecker::paramTypeToString(oparams[i], stype);
       num_to_string(i+1, snumber);
-      throw Py::RuntimeError(funcdef + " takes a " + stype + " for argument " + snumber);
+      error = funcdef + " takes a " + stype + " for argument " + snumber;
+      error = (params_desc[i] != "") ? (error+"; this is "+params_desc[i]) : error;
+      throw Py::RuntimeError(error);
     }
   }
 };

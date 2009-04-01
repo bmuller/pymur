@@ -40,10 +40,16 @@ Py::Object pymur_query_environment::setScoringRules(const Py::Tuple &rargs) {
 
 
 Py::Object pymur_query_environment::runQuery(const Py::Tuple &rargs) {
-  Arg
-    vector<ScoredExtentResult> qResults = env->runQuery(Py::String(rargs[0]).as_std_string(), 
-
-  return Py::Sequence();
+  ArgChecker("runQuery", rargs).param(STRING).param(NUMBER).check();
+  string query = Py::String(rargs[0]).as_std_string();
+  int max = Py::Int(rargs[1]);
+  vector<ScoredExtentResult> results = env->runQuery(query, max);
+  
+  Py::Sequence result(results.size());
+  for(int i=0; i<results.size(); i++) {
+    result[i] = Py::asObject(scored_extent_result::fromScoredExtentResult(results[i]));
+  }
+  return result;
 };
 
 
