@@ -45,9 +45,9 @@ Py::Object pymur_query_environment::runQuery(const Py::Tuple &rargs) {
   int max = Py::Int(rargs[1]);
   vector<ScoredExtentResult> results = env->runQuery(query, max);
   
-  Py::Sequence result(results.size());
+  Py::Sequence result;
   for(int i=0; i<results.size(); i++) {
-    result[i] = Py::asObject(scored_extent_result::fromScoredExtentResult(results[i]));
+    result[i] = Py::asObject(pymur_scored_extent_result::fromScoredExtentResult(results[i]));
   }
   return result;
 };

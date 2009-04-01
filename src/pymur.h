@@ -1,5 +1,6 @@
 #include "config.h"
 
+#include <indri/QueryEnvironment.hpp>
 #include <indri/IndexEnvironment.hpp>
 #include <indri/ConflationPattern.hpp>
 #include <indri/FileClassEnvironmentFactory.hpp>

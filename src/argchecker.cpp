@@ -40,6 +40,9 @@ void ArgChecker::paramTypeToString(ParamType t, string &s) {
   case BOOL:
     s = "<boolean>";
     break;
+  case DICT:
+    s = "<dictionary>";
+    break;
   }
 };
 
@@ -78,6 +81,9 @@ bool ArgChecker::right_type(Py::seqref<Py::Object> obj, ParamType t) {
     break;
   case LIST:
     result = obj.isList();
+    break;
+  case DICT:
+    result = obj.isDict();
     break;
   default:
     // This will be the default for BOOL: if it's an object, it can

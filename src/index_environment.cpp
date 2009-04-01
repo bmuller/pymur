@@ -17,6 +17,7 @@ void pymur_index_environment::init_type() {
   add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, "setNormalization(<boolean>)");
 
   add_varargs_method("addFile", &pymur_index_environment::addFile, "addFile(<filename>, [<file class>])");
+  add_varargs_method("addString", &pymur_index_environment::addString, "addString(<string>, <file class>, [<metadata dict>])");
 
   add_varargs_method("create", &pymur_index_environment::create, "create(<location of new index>)");
   add_varargs_method("open", &pymur_index_environment::open, "open(<index location>) <- open index");
@@ -109,6 +110,15 @@ Py::Object pymur_index_environment::addFile(const Py::Tuple &rargs) {
   } else {
     env.addFile(Py::String(rargs[0]).as_std_string(), Py::String(rargs[1]).as_std_string());
   }
+  return Py::None();
+};
+
+
+Py::Object pymur_index_environment::addString(const Py::Tuple &rargs) {
+  ArgChecker("addString", rargs).param(STRING).param(STRING).oparam(DICT).check();
+  
+  // bmuller here
+  
   return Py::None();
 };
 
