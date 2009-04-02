@@ -29,6 +29,7 @@ pymur_scored_extent_result * pymur_scored_extent_result::fromScoredExtentResult(
   r->end = ser.end;
   r->document = ser.document;
   r->number = ser.number;
+  return r;
 };
 
 

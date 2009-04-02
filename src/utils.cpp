@@ -50,7 +50,7 @@ bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, st
 
 void num_to_string(int i, string& s) {
   char c_int[100];
-  sprintf(c_int, "%ld", i);
+  sprintf(c_int, "%i", i);
   s = string(c_int);
 };
 

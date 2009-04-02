@@ -21,6 +21,7 @@
 #include "argchecker.h"
 #include "utils.h"
 #include "index.h"
+#include "parsed_document.h"
 #include "index_environment.h"
 #include "scored_extent_result.h"
 #include "query_environment.h"

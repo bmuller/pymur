@@ -99,7 +99,7 @@ void ArgChecker::check() {
   strFuncDef(funcdef);
   checked = true;
 
-  if(params.size() != rargs.length()) {
+  if(rargs.length() < params.size()) {
     num_to_string((int) params.size(), snumber);
     throw Py::RuntimeError(funcdef + " takes " + snumber + " required argument(s)");
   }
@@ -115,11 +115,11 @@ void ArgChecker::check() {
   }
 
   for(int i=0; i<oparams.size(); i++) {
-    if(!right_type(rargs[i], oparams[i])) {
+    if(!right_type(rargs[i + params.size()], oparams[i])) {
       ArgChecker::paramTypeToString(oparams[i], stype);
       num_to_string(i+1, snumber);
       error = funcdef + " takes a " + stype + " for argument " + snumber;
-      error = (params_desc[i] != "") ? (error+"; this is "+params_desc[i]) : error;
+      error = (oparams_desc[i] != "") ? (error+"; this is "+oparams_desc[i]) : error;
       throw Py::RuntimeError(error);
     }
   }

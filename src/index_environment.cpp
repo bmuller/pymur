@@ -116,10 +116,26 @@ Py::Object pymur_index_environment::addFile(const Py::Tuple &rargs) {
 
 Py::Object pymur_index_environment::addString(const Py::Tuple &rargs) {
   ArgChecker("addString", rargs).param(STRING).param(STRING).oparam(DICT).check();
-  
-  // bmuller here
-  
-  return Py::None();
+  string docstring = Py::String(rargs[0]).as_std_string();
+  string fclass = Py::String(rargs[1]).as_std_string();
+  vector<indri::parse::MetadataPair> vmetadata;
+
+  if(rargs.length() == 3) {
+    Py::Dict mdp(rargs[2]);
+    for(int i=0; i < mdp.length(); i++) {
+      Py::String key(mdp.keys()[i]);
+      Py::String value(mdp[key]);
+      indri::parse::MetadataPair metadata;
+      metadata.key = key.as_std_string().c_str();
+      metadata.value = value.as_std_string().c_str();
+      metadata.valueLength = value.length();
+      vmetadata.push_back(metadata);
+      debug("Adding metadata field " + string(metadata.key) + ": " + string((const char *) metadata.value));
+    }
+  }
+
+  int docid = (int) env.addString(docstring, fclass, vmetadata);
+  return Py::Int(docid);
 };
 
 

@@ -17,6 +17,7 @@ public:
   Py::Object setNormalization(const Py::Tuple &);
 
   Py::Object addFile(const Py::Tuple &);
+  Py::Object addString(const Py::Tuple &);
 
   Py::Object create(const Py::Tuple &);
   Py::Object close(const Py::Tuple &);

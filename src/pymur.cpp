@@ -6,6 +6,7 @@ public:
     pymur_index::init_type();
     pymur_index_environment::init_type();
     pymur_query_environment::init_type();
+    pymur_parsed_document::init_type();
 
     add_varargs_method("Index", &pymur_module::new_index, "Index(<location>)create a new indri Index object");
     add_varargs_method("IndexEnvironment", &pymur_module::new_index_environment, "create a new indri IndexEnvironment object");
