@@ -1,5 +1,6 @@
  <parameters>
-    <index>/home/bmuller/pymur/test/index</index>
+<!--    <index>/home/bmuller/pymur/test/index</index>-->
+    <index>/tmp/tmpQwgOky/index</index>
     <memory>1M</memory>
     <corpus>
       <path>/home/bmuller/pymur/test/data</path>

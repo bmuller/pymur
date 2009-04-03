@@ -40,3 +40,10 @@ void num_to_string(int i, string& s);
  * @param s The string to put it in
  */
 void num_to_string(double i, string& s);
+
+/** 
+ * Make a string lowercase
+ * 
+ * @param str String to make lowercase.
+ */
+void str_to_lower(string& str);

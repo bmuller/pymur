@@ -11,15 +11,6 @@ class TestQueries(unittest.TestCase):
         self.topdir = tempfile.mkdtemp()
         logging.debug("Just made temporary directory at %s" % self.topdir)
         self.index = "%s/%s" % (self.topdir, "index")
-        ie = pymur.IndexEnvironment()
-        logging.debug("Creating index %s" % self.index)
-        ie.setStemmer("porter")
-        ie.setNormalization(True)
-        ie.setStopwords(["one", "two"])
-        ie.setIndexedFields(["PMID"], "xml")
-        ie.create(self.index)
-        ie.addFile("./data/pubmed.xml", "xml")
-        ie.close()
 
 
     def tearDown(self):
@@ -28,20 +19,14 @@ class TestQueries(unittest.TestCase):
         
         
     def testStringInput(self):
-        return
-        ie.setStemmer("porter")
+        ie = self.makeIndexEnvironment()
         ie.addString("this is the string one that is a long string", "txt", {'title': "test one"})
         ie.addString("this is the string two that has words like the an a", "txt", {'title': "test two"})
+        ie.close()
     
-        qe = pymur.QueryEnvironment()
-        qe.addIndex(self.index)
+        qe = self.makeQueryEnvironment()
         docs = qe.documentsFromMetadata("title", ["test one", "test two"])
         print docs
-        docs = qe.documents([1, 2])
-        print docs[0].content
-        print docs[0].text
-        print docs[0].terms
-        print docs[0].metadata
 
 
     def makeQueryEnvironment(self):
@@ -50,19 +35,28 @@ class TestQueries(unittest.TestCase):
         return qe
 
 
-    def makeIndexEnvironment(self):
+    def makeIndexEnvironment(self, f=None):
+        logging.debug("Creating index %s" % self.index)
         ie = pymur.IndexEnvironment()
-        ie.open(self.index)
+        ie.setStemmer("porter")        
+        ie.setNormalization(True)
+        if not f is None:
+            f(ie)
+        ie.create(self.index)
         return ie
+        
 
     def testFileInput(self):
-        ie = self.makeIndexEnvironment()
+        ie = self.makeIndexEnvironment(lambda ie: ie.setIndexedFields(["PMID"], "xml"))
+        ie.addFile("./data/pubmed.xml", "xml")
         ie.close()
 
         qe = self.makeQueryEnvironment()
         results = qe.runQuery("11748933.pmid", 3)
-        print results
         qe.close()
+
+        self.failUnless(len(results) == 1)
+
         
         
 if __name__ == "__main__":

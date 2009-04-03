@@ -76,7 +76,9 @@ Py::Object pymur_index_environment::setIndexedFields(const Py::Tuple &rargs) {
   for(unsigned int i=0; i<s.length(); i++) {
     if(!s[i].isString())
       throw Py::RuntimeError("setIndexedFields takes an array of index field names as first arg");
-    fields.push_back(Py::String(s[i]).as_std_string());
+    string field = Py::String(s[i]).as_std_string();
+    str_to_lower(field);
+    fields.push_back(field);
   }
 
   env.setIndexedFields(fields);
@@ -145,7 +147,7 @@ Py::Object pymur_index_environment::addString(const Py::Tuple &rargs) {
       indri::parse::MetadataPair metadata;
       metadata.key = key.as_std_string().c_str();
       metadata.value = value.as_std_string().c_str();
-      metadata.valueLength = value.length();
+      metadata.valueLength = value.length() + 1;
       vmetadata.push_back(metadata);
       debug("Adding metadata field " + string(metadata.key) + ": " + string((const char *) metadata.value));
     }

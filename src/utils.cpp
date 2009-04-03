@@ -25,6 +25,11 @@ template <class T> bool in_vector(vector<T> things, T thing) {
   return false;
 };
 
+void str_to_lower(string& str) {
+  for(int i=0; i<str.size(); i++ )
+    str[i] = tolower(str[i]);
+};
+
 bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, string &name) {
   bool result = false;
   map<ConflationPattern*, string>::const_iterator iter;
