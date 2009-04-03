@@ -17,6 +17,8 @@ void pymur_query_environment::init_type() {
   add_varargs_method("documents", &pymur_query_environment::documents, "documents(<list of document ids>)");
   add_varargs_method("documentsFromMetadata", &pymur_query_environment::documentsFromMetadata, 
 		     "documentsFromMetadata(<attribute name>, <list of attribute values to match>)");
+  add_varargs_method("documentMetadata", &pymur_query_environment::documentMetadata, 
+		     "documentMetadata(<list of document ids>, <attribute name>) <- get attribute values for documents");
 }
 
 
@@ -67,6 +69,27 @@ Py::Object pymur_query_environment::documents(const Py::Tuple &rargs) {
 };
 
 
+Py::Object pymur_query_environment::documentMetadata(const Py::Tuple &rargs) {
+  ArgChecker("documentMetadata", rargs).param(LIST).param(STRING).check();
+  Py::List pdocids(rargs[0]);
+  vector<int> docids;
+  for (int i=0; i<pdocids.size(); i++) {
+    if(!pdocids[i].isNumeric())
+      throw Py::RuntimeError("documentMetadata takes a list of integer doc ids");
+    int docid = Py::Int(pdocids[i]);
+    docids.push_back(docid);
+  };
+
+  string name = Py::String(rargs[1]).as_std_string();
+  vector<string> values = env->documentMetadata(docids, name);
+  Py::List result(values.size());
+  for (int i=0; i<values.size(); i++)
+    result[i] = Py::String(values[i]);
+
+  return result;
+};
+
+
 Py::Object pymur_query_environment::documentsFromMetadata(const Py::Tuple &rargs) {
   ArgChecker("documentsFromMetadata", rargs).param(STRING).param(LIST).check();
   string name = Py::String(rargs[0]).as_std_string();
@@ -78,13 +101,7 @@ Py::Object pymur_query_environment::documentsFromMetadata(const Py::Tuple &rargs
     values.push_back(Py::String(pvalues[i]).as_std_string());
   };
 
-  for(int i=0; i<values.size(); i++)
-    debug("Looking for metadata field " + name + " equal to " + values[i]);
-
   vector<indri::api::ParsedDocument *> docs = env->documentsFromMetadata(name, values);
-  string snum;
-  num_to_string((int) docs.size(), snum);
-  debug("Found " + snum + " docs.");
 
   Py::List result((int) docs.size());
   for(int i=0; i<docs.size(); i++) 

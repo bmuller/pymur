@@ -101,7 +101,12 @@ void ArgChecker::check() {
 
   if(rargs.length() < params.size()) {
     num_to_string((int) params.size(), snumber);
-    throw Py::RuntimeError(funcdef + " takes " + snumber + " required argument(s)");
+    throw Py::RuntimeError(funcdef + " takes at least " + snumber + " required argument(s)");
+  }
+
+  if(rargs.length() > (params.size() + oparams.size())) {
+    num_to_string((int) (params.size() + oparams.size()), snumber);
+    throw Py::RuntimeError(funcdef + " does not take more than " + snumber + " argument(s)");    
   }
 
   for(int i=0; i<params.size(); i++) {
@@ -114,13 +119,13 @@ void ArgChecker::check() {
     }
   }
 
-  for(int i=0; i<oparams.size(); i++) {
-    if(!right_type(rargs[i + params.size()], oparams[i])) {
-      ArgChecker::paramTypeToString(oparams[i], stype);
+  for(int i=params.size(); i<rargs.length(); i++) {
+    if(!right_type(rargs[i], oparams[i-params.size()])) {
+      ArgChecker::paramTypeToString(oparams[i-params.size()], stype);
       num_to_string(i+1, snumber);
       error = funcdef + " takes a " + stype + " for argument " + snumber;
-      error = (oparams_desc[i] != "") ? (error+"; this is "+oparams_desc[i]) : error;
+      error = (oparams_desc[i-params.size()] != "") ? (error+"; this is "+oparams_desc[i-params.size()]) : error;
       throw Py::RuntimeError(error);
-    }
+    }    
   }
 };

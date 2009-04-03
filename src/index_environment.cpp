@@ -15,6 +15,8 @@ void pymur_index_environment::init_type() {
   add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, "setIndexedFields(<List of fields>, <text class>)");
   add_varargs_method("setStemmer", &pymur_index_environment::setStemmer, "setStemmer(<stemmer name>)");
   add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, "setNormalization(<boolean>)");
+  add_varargs_method("setMetadataIndexedFields", &pymur_index_environment::setMetadataIndexedFields, 
+		     "setMetadataIndexedFields(<list of forward field names>, <list of backward field names>)");
   add_varargs_method("documentsSeen", &pymur_index_environment::documentsSeen, "documentsSeen() <- # docs seen this session");
 
   add_varargs_method("addFile", &pymur_index_environment::addFile, "addFile(<filename>, [<file class>])");
@@ -57,6 +59,29 @@ Py::Object pymur_index_environment::setStopwords(const Py::Tuple &rargs) {
     stopwords.push_back(Py::String(s[i]).as_std_string());
   }
   env.setStopwords(stopwords);
+  return Py::None();
+};
+
+
+Py::Object pymur_index_environment::setMetadataIndexedFields(const Py::Tuple &rargs) {
+  ArgChecker("setMetadataIndexedFields", rargs).param(LIST).param(LIST).check();
+  
+  vector<string> forward;
+  Py::List pforward(rargs[0]);
+  for(unsigned int i=0; i<pforward.length(); i++) {
+    if(!pforward[i].isString())
+      throw Py::RuntimeError("setMetadataIndexedFields takes a list of strings for both arguments");
+    forward.push_back(Py::String(pforward[i]).as_std_string());
+  }
+
+  vector<string> backward;
+  Py::List pbackward(rargs[1]);
+  for(unsigned int i=0; i<pbackward.length(); i++) {
+    if(!pbackward[i].isString())
+      throw Py::RuntimeError("setMetadataIndexedFields takes a list of strings for both arguments");
+    backward.push_back(Py::String(pbackward[i]).as_std_string());
+  }
+  env.setMetadataIndexedFields(forward, backward);
   return Py::None();
 };
 
@@ -145,11 +170,8 @@ Py::Object pymur_index_environment::addString(const Py::Tuple &rargs) {
       Py::String key(mdp.keys()[i]);
       Py::String value(mdp[key]);
       indri::parse::MetadataPair metadata;
-      metadata.key = key.as_std_string().c_str();
-      metadata.value = value.as_std_string().c_str();
-      metadata.valueLength = value.length() + 1;
+      make_metadata_pair(metadata, key.as_std_string(), value.as_std_string());
       vmetadata.push_back(metadata);
-      debug("Adding metadata field " + string(metadata.key) + ": " + string((const char *) metadata.value));
     }
   }
 

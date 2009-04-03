@@ -47,3 +47,12 @@ void num_to_string(double i, string& s);
  * @param str String to make lowercase.
  */
 void str_to_lower(string& str);
+
+/** 
+ * Create a new indri::parse::MetadataPair with the given key and value.
+ * 
+ * @param metadata The metadata to set
+ * @param key Given key
+ * @param value Given value
+ */
+void make_metadata_pair( indri::parse::MetadataPair &metadata, string key, string value);

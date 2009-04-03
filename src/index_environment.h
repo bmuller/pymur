@@ -15,6 +15,7 @@ public:
   Py::Object setIndexedFields(const Py::Tuple &);
   Py::Object setStemmer(const Py::Tuple &);
   Py::Object setNormalization(const Py::Tuple &);
+  Py::Object setMetadataIndexedFields(const Py::Tuple &);
 
   Py::Object addFile(const Py::Tuple &);
   Py::Object addString(const Py::Tuple &);

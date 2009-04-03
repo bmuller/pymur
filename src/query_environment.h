@@ -16,6 +16,7 @@ public:
 
   Py::Object documents(const Py::Tuple &);
   Py::Object documentsFromMetadata(const Py::Tuple &);
+  Py::Object documentMetadata(const Py::Tuple &);
 
   // overwrite PythonExtension methods
   virtual Py::Object repr();

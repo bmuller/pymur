@@ -30,6 +30,17 @@ void str_to_lower(string& str) {
     str[i] = tolower(str[i]);
 };
 
+void make_metadata_pair( indri::parse::MetadataPair &metadata, string key, string value) {
+  char *ckey = new char[key.size()+1];
+  char *cvalue = new char[value.size()+1];
+  strcpy(ckey, key.c_str());
+  strcpy(cvalue, value.c_str());
+
+  metadata.key = ckey;
+  metadata.value = cvalue;
+  metadata.valueLength = value.size()+1;
+};
+
 bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, string &name) {
   bool result = false;
   map<ConflationPattern*, string>::const_iterator iter;
