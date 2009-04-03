@@ -16,6 +16,8 @@ AC_HEADER_STDC
 
 AC_PYTHON_DEVEL([>='2.4'])
 
+AC_SUBST([PYTHON])
+
 # provide flag --enable-debug
 AC_ARG_ENABLE(debug, AC_HELP_STRING([[--enable-debug]], [enable debugging output to stdout]),
 [if test "$enableval" = "yes"; then

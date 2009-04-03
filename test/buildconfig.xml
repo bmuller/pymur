@@ -1,0 +1,12 @@
+ <parameters>
+    <index>/home/bmuller/pymur/test/index</index>
+    <memory>1M</memory>
+    <corpus>
+      <path>/home/bmuller/pymur/test/data</path>
+      <class>xml</class>
+    </corpus>
+    <stemmer><name>porter</name></stemmer>
+    <field>
+      <name>PMID</name>
+    </field>
+  </parameters>

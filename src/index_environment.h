@@ -22,6 +22,7 @@ public:
   Py::Object create(const Py::Tuple &);
   Py::Object close(const Py::Tuple &);
   Py::Object open(const Py::Tuple &);
+  Py::Object documentsSeen(const Py::Tuple &);
 
   // overwrite PythonExtension methods
   virtual Py::Object repr();

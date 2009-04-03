@@ -12,9 +12,10 @@ void pymur_index_environment::init_type() {
 
   add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<List of stopwords>)");
   add_varargs_method("setMemory", &pymur_index_environment::setMemory, "setMemory(<memory size in bytes>)");
-  add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, "setIndexedFields(<List of fields>)");
+  add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, "setIndexedFields(<List of fields>, <text class>)");
   add_varargs_method("setStemmer", &pymur_index_environment::setStemmer, "setStemmer(<stemmer name>)");
   add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, "setNormalization(<boolean>)");
+  add_varargs_method("documentsSeen", &pymur_index_environment::documentsSeen, "documentsSeen() <- # docs seen this session");
 
   add_varargs_method("addFile", &pymur_index_environment::addFile, "addFile(<filename>, [<file class>])");
   add_varargs_method("addString", &pymur_index_environment::addString, "addString(<string>, <file class>, [<metadata dict>])");
@@ -31,7 +32,17 @@ pymur_index_environment::pymur_index_environment() {
 
 
 pymur_index_environment::~pymur_index_environment() {
+  try {
+    env.close();
+  } catch(Exception &e) {
+    throw Py::RuntimeError("Could not close index: " + e.what());
+  } 
+};
 
+
+Py::Object pymur_index_environment::documentsSeen(const Py::Tuple &rargs) {
+  ArgChecker("documentsSeen", rargs).check();
+  return Py::Int(env.documentsSeen());
 };
 
 
@@ -105,11 +116,17 @@ Py::Object pymur_index_environment::setNormalization(const Py::Tuple &rargs) {
 
 Py::Object pymur_index_environment::addFile(const Py::Tuple &rargs) {
   ArgChecker("addFile", rargs).param(STRING).oparam(STRING).check();
+  int docsseen = env.documentsSeen();
+  string fname = Py::String(rargs[0]).as_std_string();
   if(rargs.length() == 1) {
-    env.addFile(Py::String(rargs[0]).as_std_string());
+    env.addFile(fname);
   } else {
-    env.addFile(Py::String(rargs[0]).as_std_string(), Py::String(rargs[1]).as_std_string());
+    env.addFile(fname, Py::String(rargs[1]).as_std_string());
   }
+
+  if(env.documentsSeen() == docsseen) 
+    throw Py::RuntimeError("Problem reading file \"" + fname + "\"");
+
   return Py::None();
 };
 
@@ -152,7 +169,11 @@ Py::Object pymur_index_environment::create(const Py::Tuple &rargs) {
 
 Py::Object pymur_index_environment::close(const Py::Tuple &rargs) {
   ArgChecker("close", rargs).check();
-  env.close();
+  try {
+    env.close();
+  } catch(Exception &e) {
+    throw Py::RuntimeError("Could not close index: " + e.what());
+  } 
   return Py::None();
 };
 

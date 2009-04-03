@@ -32,7 +32,11 @@ pymur_query_environment::~pymur_query_environment() {
 
 Py::Object pymur_query_environment::close(const Py::Tuple &rargs) {
   ArgChecker("close", rargs).check();
-  env->close();
+  try {
+    env->close();
+  } catch(Exception &e) {
+    throw Py::RuntimeError("Could not close index: " + e.what());
+  }
   return Py::None();
 };
 
@@ -68,7 +72,14 @@ Py::Object pymur_query_environment::documentsFromMetadata(const Py::Tuple &rargs
     values.push_back(Py::String(pvalues[i]).as_std_string());
   };
 
+  for(int i=0; i<values.size(); i++)
+    debug("Looking for metadata field " + name + " equal to " + values[i]);
+
   vector<indri::api::ParsedDocument *> docs = env->documentsFromMetadata(name, values);
+  string snum;
+  num_to_string((int) docs.size(), snum);
+  debug("Found " + snum + " docs.");
+
   Py::List result((int) docs.size());
   for(int i=0; i<docs.size(); i++) 
     result[i] = Py::asObject(pymur_parsed_document::fromParsedDocument(docs[i]));
@@ -97,7 +108,7 @@ Py::Object pymur_query_environment::runQuery(const Py::Tuple &rargs) {
   int max = Py::Int(rargs[1]);
   vector<ScoredExtentResult> results = env->runQuery(query, max);
   
-  Py::Sequence result;
+  Py::List result(results.size());
   for(int i=0; i<results.size(); i++) {
     result[i] = Py::asObject(pymur_scored_extent_result::fromScoredExtentResult(results[i]));
   }
