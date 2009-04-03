@@ -13,10 +13,12 @@ class TestQueries(unittest.TestCase):
         self.index = "%s/%s" % (self.topdir, "index")
         ie = pymur.IndexEnvironment()
         logging.debug("Creating index %s" % self.index)
-        ie.create(self.index)
         ie.setStemmer("porter")
         ie.setNormalization(True)
         ie.setStopwords(["one", "two"])
+        ie.setIndexedFields(["PMID"], "xml")
+        ie.create(self.index)
+        ie.addFile("./data/pubmed.xml", "xml")
         ie.close()
 
 
@@ -55,8 +57,6 @@ class TestQueries(unittest.TestCase):
 
     def testFileInput(self):
         ie = self.makeIndexEnvironment()
-        ie.setIndexedFields(["PMID"], "xml")
-        ie.addFile("./test/pubmed.xml", "xml")
         ie.close()
 
         qe = self.makeQueryEnvironment()
