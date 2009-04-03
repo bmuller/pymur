@@ -27,7 +27,7 @@ pymur_parsed_document * pymur_parsed_document::fromParsedDocument(ParsedDocument
 
   for(int i=0; i<pd->metadata.size(); i++) {
     string key(pd->metadata[i].key);
-    string value((const char *) pd->metadata[i].value, pd->metadata[i].valueLength);
+    string value((const char *) pd->metadata[i].value);
     npd->metadata[key] = Py::String(value);
   }
 

@@ -52,7 +52,13 @@ Py::Object pymur_query_environment::documents(const Py::Tuple &rargs) {
     docids.push_back(docid);
   };
 
-  vector<indri::api::ParsedDocument *> docs = env->documents(docids);
+  vector<indri::api::ParsedDocument *> docs;
+  try {
+    docs = env->documents(docids);
+  } catch(Exception &e) {
+    throw Py::RuntimeError("Error fetching one or more documents: " + e.what());
+  }
+
   Py::List result((int) docs.size());
   for(int i=0; i<docs.size(); i++) 
     result[i] = Py::asObject(pymur_parsed_document::fromParsedDocument(docs[i]));
@@ -106,7 +112,13 @@ Py::Object pymur_query_environment::runQuery(const Py::Tuple &rargs) {
   ArgChecker("runQuery", rargs).param(STRING).param(NUMBER).check();
   string query = Py::String(rargs[0]).as_std_string();
   int max = Py::Int(rargs[1]);
-  vector<ScoredExtentResult> results = env->runQuery(query, max);
+
+  vector<ScoredExtentResult> results;
+  try {
+    results = env->runQuery(query, max);
+  } catch(Exception &e) {
+    throw Py::RuntimeError("problem running query: " + e.what());
+  }
   
   Py::List result(results.size());
   for(int i=0; i<results.size(); i++) {
