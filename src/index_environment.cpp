@@ -10,21 +10,33 @@ void pymur_index_environment::init_type() {
   behaviors().doc("indri IndexEnvironment");
   behaviors().supportRepr();
 
-  add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<List of stopwords>)");
+  add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<list of stopwords>)");
   add_varargs_method("setMemory", &pymur_index_environment::setMemory, "setMemory(<memory size in bytes>)");
-  add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, "setIndexedFields(<List of fields>, <text class>)");
-  add_varargs_method("setStemmer", &pymur_index_environment::setStemmer, "setStemmer(<stemmer name>)");
-  add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, "setNormalization(<boolean>)");
+  add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, 
+		     "setIndexedFields(<list of fields>, <text class>): where text class is one of txt, xml, html, ...");
+  add_varargs_method("setStemmer", &pymur_index_environment::setStemmer, 
+		     "setStemmer(<stemmer name>): where stemmer name is porter or krovetz");
+  add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, 
+		     "setNormalization(<boolean>): set normalization of case and some punctuation; default"
+		     " is true (normalize during indexing and at query time) ");
   add_varargs_method("setMetadataIndexedFields", &pymur_index_environment::setMetadataIndexedFields, 
-		     "setMetadataIndexedFields(<list of forward field names>, <list of backward field names>)");
-  add_varargs_method("documentsSeen", &pymur_index_environment::documentsSeen, "documentsSeen() <- # docs seen this session");
+		     "setMetadataIndexedFields(<list of forward field names>, <list of backward field names>): "
+		     "Set names of metadata fields to be indexed for fast retrieval. The forward fields are indexed in a "
+		     "B-Tree mapping (documentID, metadataValue). If a field is not forward indexed, the documentMetadata "
+		     "calls will still work, but they will be slower (the document has to be retrieved, decompressed and "
+		     "parsed to get the metadata back, instead of just a B-Tree lookup). The backward indexed fields store "
+		     "a mapping of (metadataValue, documentID). If a field is not backward indexed, the "
+		     "documentIDsFromMetadata and documentFromMetadata calls will not work.");
+  add_varargs_method("documentsSeen", &pymur_index_environment::documentsSeen, "documentsSeen(): get number of docs seen this session");
 
-  add_varargs_method("addFile", &pymur_index_environment::addFile, "addFile(<filename>, [<file class>])");
-  add_varargs_method("addString", &pymur_index_environment::addString, "addString(<string>, <file class>, [<metadata dict>])");
+  add_varargs_method("addFile", &pymur_index_environment::addFile, "addFile(<filelocation>, [<file class>]): add a file with given class");
+  add_varargs_method("addString", &pymur_index_environment::addString, "addString(<string>, <file class>, [<metadata dict>]): "
+		     "add a given string as the given class.  Accepts optional metadata dictionary - if given, make sure index "
+		     "was created with setMetadataIndexedFields called for the given metadata keys.");
 
   add_varargs_method("create", &pymur_index_environment::create, "create(<location of new index>)");
-  add_varargs_method("open", &pymur_index_environment::open, "open(<index location>) <- open index");
-  add_varargs_method("close", &pymur_index_environment::close, "close() <- close index");
+  add_varargs_method("open", &pymur_index_environment::open, "open(<index location>): open index");
+  add_varargs_method("close", &pymur_index_environment::close, "close(): close index");
 }
 
 

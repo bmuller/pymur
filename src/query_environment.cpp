@@ -9,16 +9,22 @@ void pymur_query_environment::init_type() {
   behaviors().doc("indri QueryEnvironment");
   behaviors().supportRepr();
 
-  add_varargs_method("addIndex", &pymur_query_environment::addIndex, "addIndex(<path to index>)");
-  add_varargs_method("close", &pymur_query_environment::close, "close() <- close the environment");
-  add_varargs_method("setScoringRules", &pymur_query_environment::setScoringRules, "setScoringRules(<string list>)");
-  add_varargs_method("runQuery", &pymur_query_environment::runQuery, "runQuery(<query>, <max results>)");
+  add_varargs_method("addIndex", &pymur_query_environment::addIndex, 
+		     "addIndex(<path to index>): must be called to specify index location");
+  add_varargs_method("close", &pymur_query_environment::close, "close(): close the environment");
+  add_varargs_method("setScoringRules", &pymur_query_environment::setScoringRules, 
+		     "setScoringRules(<string list>): see Lemur examples for rule string format");
+  add_varargs_method("runQuery", &pymur_query_environment::runQuery, 
+		     "runQuery(<query>, <max results>): run an indri query, returns list of ScoredExtentResult objects");
 
-  add_varargs_method("documents", &pymur_query_environment::documents, "documents(<list of document ids>)");
+  add_varargs_method("documents", &pymur_query_environment::documents, 
+		     "documents(<list of document ids>): returns list of ParsedDocument objects");
   add_varargs_method("documentsFromMetadata", &pymur_query_environment::documentsFromMetadata, 
-		     "documentsFromMetadata(<attribute name>, <list of attribute values to match>)");
+		     "documentsFromMetadata(<attribute name>, <list of attribute values to match>): returns "
+		     " list of ParsedDocument objects");
   add_varargs_method("documentMetadata", &pymur_query_environment::documentMetadata, 
-		     "documentMetadata(<list of document ids>, <attribute name>) <- get attribute values for documents");
+		     "documentMetadata(<list of document ids>, <attribute name>): Fetch the named metadata attribute "
+		     "for a list of document ids. Returns a list of string values.");
 }
 
 

@@ -8,16 +8,18 @@ void pymur_index::init_type() {
   behaviors().name("Index");
   behaviors().doc("indri Index");
   behaviors().supportRepr();
-  //behaviors().supportGetattr();
   behaviors().supportSequenceType();
 
-  add_varargs_method("docCount", &pymur_index::docCount, "docCount() <- Number of documents in index");
-  add_varargs_method("termCount", &pymur_index::termCount, "termCount() <- Number of terms in index");
-  add_varargs_method("termCountUnique", &pymur_index::termCountUnique, "termCountUnique() <- Number of terms in index");
-  add_varargs_method("term", &pymur_index::term, "term(<index>) <- get term with index");
-  add_varargs_method("runQuery", &pymur_index::runQuery, "runQuery(<query>, [<model type>=okapi]) <- get term with index");
-  add_varargs_method("document", &pymur_index::document, "document(<index>, [<use words>=False]) <- get document");
-  add_varargs_method("__len__", &pymur_index::docCount, "__len__() <- Number of documents in index");
+  add_varargs_method("docCount", &pymur_index::docCount, "docCount(): Number of documents in index");
+  add_varargs_method("termCount", &pymur_index::termCount, "termCount(): Number of terms in index");
+  add_varargs_method("termCountUnique", &pymur_index::termCountUnique, "termCountUnique(): Number of terms in index");
+  add_varargs_method("term", &pymur_index::term, "term(<index>): get term with index, returns string");
+  add_varargs_method("runQuery", &pymur_index::runQuery, 
+		     "runQuery(<query>, [<model type>=okapi]): same as lemur::api::RetMethodManager::runQuery with text "
+		     "query and given model");
+  add_varargs_method("document", &pymur_index::document, 
+		     "document(<index>, [<use words>=False]): get document, either as list of strings or list of term indexes");
+  add_varargs_method("__len__", &pymur_index::docCount, "__len__(): Number of documents in index");
 }
 
 

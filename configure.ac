@@ -1,5 +1,5 @@
 AC_INIT([pymer], [0.0], [mullerb@musc.edu])
-AC_DEFINE([PACKAGE_URL],["http://projects.dbbe.musc.edu/trac/pymer"],[project url])
+AC_DEFINE([PACKAGE_URL],["http://projects.dbbe.musc.edu/trac/pymur"],[project url])
 AM_CONFIG_HEADER(src/config.h)
 AM_INIT_AUTOMAKE()
 
