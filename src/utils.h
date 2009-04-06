@@ -1,9 +1,33 @@
+/*
+    Pymur is a Python interface to the Lemur Toolkit.
+    Copyright (C) 2009 Brian Muller <mullerb@musc.edu>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 using namespace std;
 using namespace indri::api;
 using namespace indri::parse;
 
 
+/** 
+ * Print debug messages if DEBUG is defined.
+ * 
+ * @param msg Message to print
+ */
 void debug(string msg);
+
 
 /** 
  * Determine if thing is in things
@@ -15,6 +39,7 @@ void debug(string msg);
  */
 template <class T> bool in_vector(vector<T> things, T thing);
 
+
 /** 
  * Add field conflations and a field to a specification index.
  * 
@@ -25,6 +50,7 @@ template <class T> bool in_vector(vector<T> things, T thing);
  */
 bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, string &name);
 
+
 /** 
  * Convert an int to a string
  * 
@@ -32,6 +58,7 @@ bool addFieldAndConflations(FileClassEnvironmentFactory::Specification *spec, st
  * @param s The string to create
  */
 void num_to_string(int i, string& s);
+
 
 /** 
  * Convert a double to a string
@@ -41,12 +68,14 @@ void num_to_string(int i, string& s);
  */
 void num_to_string(double i, string& s);
 
+
 /** 
  * Make a string lowercase
  * 
  * @param str String to make lowercase.
  */
 void str_to_lower(string& str);
+
 
 /** 
  * Create a new indri::parse::MetadataPair with the given key and value.
@@ -56,3 +85,14 @@ void str_to_lower(string& str);
  * @param value Given value
  */
 void make_metadata_pair( indri::parse::MetadataPair &metadata, string key, string value);
+
+
+/** 
+ * Split a string into parts based on delimiter.
+ * 
+ * @param s The string to split up
+ * @param e The delimiter
+ * 
+ * @return The resulting parts
+ */
+vector<string> explode(string s, string e);

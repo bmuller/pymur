@@ -1,3 +1,21 @@
+/*
+    Pymur is a Python interface to the Lemur Toolkit.
+    Copyright (C) 2009 Brian Muller <mullerb@musc.edu>
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "pymur.h"
 
 class pymur_module : public Py::ExtensionModule<pymur_module> {
@@ -21,10 +39,12 @@ public:
     string description = "A python interface to the Lemur Toolkit. See " + string(PACKAGE_URL) + " for more information.";
     initialize(description.c_str());
 
-    Py::Tuple version(3);
-    version[0] = Py::Int(0);
-    version[1] = Py::Int(0);
-    version[2] = Py::Int(0);
+    vector<string> version_parts = explode(string(PACKAGE_VERSION), ".");
+    Py::Tuple version(version_parts.size());
+    for(int i=0; i<version_parts.size(); i++) {
+      int vpart = atoi(version_parts[i].c_str());
+      version[i] = Py::Int(vpart);
+    }
 
     Py::Dict d(moduleDictionary());    
     d["version"] = version;
