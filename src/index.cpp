@@ -28,8 +28,10 @@ void pymur_index::init_type() {
   behaviors().supportRepr();
   behaviors().supportSequenceType();
 
-  add_varargs_method("docCount", &pymur_index::docCount, "docCount(): Number of documents in index");
-  add_varargs_method("termCount", &pymur_index::termCount, "termCount(): Number of terms in index");
+  add_varargs_method("docCount", &pymur_index::docCount, "docCount([<term id>]): Number of documents in index, or, "
+		     "if a term id is given, get number of documents the term appears in.");
+  add_varargs_method("termCount", &pymur_index::termCount, "termCount([<term id>]): Number of terms in index, or, "
+		     "if a term id is given, number of times that term occurs.");
   add_varargs_method("termCountUnique", &pymur_index::termCountUnique, "termCountUnique(): Number of terms in index");
   add_varargs_method("term", &pymur_index::term, "term(<index>): get term with index, returns string");
   add_varargs_method("runQuery", &pymur_index::runQuery, 
@@ -38,7 +40,15 @@ void pymur_index::init_type() {
   add_varargs_method("document", &pymur_index::document, 
 		     "document(<index>, [<use words>=False]): get document, either as list of strings or list of term indexes");
   add_varargs_method("__len__", &pymur_index::docCount, "__len__(): Number of documents in index");
-}
+
+  add_varargs_method("docLength", &pymur_index::docLength, "docLength(<doc id>): Returns number of terms in document.");
+  add_varargs_method("docLengthAvg", &pymur_index::docLength, "docLengthAvg(): Returns average number of terms in document.");
+
+  add_varargs_method("fieldInfoList", &pymur_index::fieldInfoList, "fieldInfoList(<doc id>, [<field id>]): Returns a list "
+		     "of FieldInfo objects with information about fields (or a specific field if field id is given) available "
+		     "in the given document.");
+  add_varargs_method("field", &pymur_index::field, "field(<field id>): Get the string field name for the given field id.");
+};
 
 
 pymur_index::pymur_index(string location) : loaded(false) {
@@ -54,6 +64,64 @@ pymur_index::pymur_index(string location) : loaded(false) {
 pymur_index::~pymur_index() {
   if(loaded)
     delete index;
+};
+
+
+Py::Object pymur_index::field(const Py::Tuple &rargs) {
+  ArgChecker("field", rargs).param(NUMBER).check();
+  int fid = Py::Int(rargs[0]);
+  string field = "";
+  try {
+    field = index->field(fid);
+  } catch(lemur::api::Exception &e) {
+    throw Py::RuntimeError("Problem fetching field: " + e.what());
+  }
+  return Py::String(field);
+};
+
+
+Py::Object pymur_index::fieldInfoList(const Py::Tuple &rargs) {
+  ArgChecker("fieldInfoList", rargs).param(NUMBER).oparam(NUMBER).check();
+  int docid = Py::Int(rargs[0]);
+  if(docid > index->docCount() || docid == 0)
+    throw Py::IndexError("index either out of bounds or zero (there is no document at index 0)");
+
+  Py::List result;
+  try {
+    FieldInfoList *fil;
+    if(rargs.length() == 2) {
+      int fieldid = Py::Int(rargs[1]);
+      fil = index->fieldInfoList(docid, fieldid);
+    } else {
+      fil = index->fieldInfoList(docid);
+    }
+    fil->startIteration();
+    while(fil->hasMore()) {
+      FieldInfo *fi = fil->nextEntry();
+      result.append(Py::asObject(pymur_field_info::fromFieldInfo(fi)));
+    }
+    delete fil;
+  } catch(lemur::api::Exception &e) {
+    throw Py::RuntimeError("Problem fetching field info list: " + e.what());
+  }
+  return result;
+};
+
+
+Py::Object pymur_index::docLength(const Py::Tuple &rargs) {
+  ArgChecker("docLength", rargs).param(NUMBER).check();
+  int docid = Py::Int(rargs[0]);
+  if(docid > index->docCount() || docid == 0)
+    throw Py::IndexError("index either out of bounds or zero (there is no document at index 0)");
+
+  int doclength = (int) index->docLength(docid);
+  return Py::Int(doclength);
+};
+
+
+Py::Object pymur_index::docLengthAvg(const Py::Tuple &rargs) {
+  ArgChecker("docLengthAvg", rargs).check();  
+  return Py::Float(index->docLengthAvg());
 };
 
 
@@ -102,8 +170,16 @@ Py::Object pymur_index::document(const Py::Tuple &rargs) {
 };
 
 Py::Object pymur_index::docCount(const Py::Tuple &rargs) {
-  ArgChecker("docCount", rargs).check();
-  Py::Int result = index->docCount();
+  ArgChecker("docCount", rargs).oparam(NUMBER).check();
+
+  Py::Int result;
+  if (rargs.length() == 1) {
+    int term = Py::Int(rargs[0]);
+    result = index->docCount(term);
+  } else if(rargs.length() == 0) {
+    result = index->docCount();
+  }
+
   return result;
 };
 

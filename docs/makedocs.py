@@ -26,7 +26,8 @@ classes = [
     [pymur.IndexEnvironment],
     [pymur.QueryEnvironment],
     [pymur.ScoredExtentResult],
-    [pymur.ParsedDocument]
+    [pymur.ParsedDocument],
+    [pymur.FieldInfo]
 ]
 docs = IntroDocs(pymur, classes, docdir)
 docs.makeDocs()

@@ -26,6 +26,7 @@ public:
     pymur_query_environment::init_type();
     pymur_parsed_document::init_type();
     pymur_scored_extent_result::init_type();
+    pymur_field_info::init_type();
 
     add_varargs_method("Index", &pymur_module::new_index, 
 		       "Index(<location>): class for running standard queries and determining basic index information");
@@ -35,6 +36,10 @@ public:
 		       "ParsedDocument(): class that represents a parsed document.  Has content, text, metadata, and terms attributes.");
     add_varargs_method("ScoredExtentResult", &pymur_module::new_scored_extent_result, 
 		       "ScoredExtentResult(): query result type.  Has score, begin, end, document, and number attributes.");
+    add_varargs_method("FieldInfo", &pymur_module::new_field_info, 
+		       "FieldInfo(): an object to store information about fields.  Has id, begin, end, parentOrdinal, "
+		       "ordinal, and number attributes.");
+
 
     string description = "A python interface to the Lemur Toolkit. See " + string(PACKAGE_URL) + " for more information.";
     initialize(description.c_str());
@@ -81,6 +86,11 @@ public:
   Py::Object new_query_environment(const Py::Tuple &rargs) {
     ArgChecker("QueryEnvironment", rargs).check();
     return Py::asObject(new pymur_query_environment());
+  };
+
+  Py::Object new_field_info(const Py::Tuple &rargs) {
+    ArgChecker("FieldInfo", rargs).check();
+    return Py::asObject(new pymur_field_info());
   };
 };
 

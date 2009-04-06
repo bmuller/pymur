@@ -19,29 +19,17 @@
 using namespace std;
 using namespace lemur::api;
 
-class pymur_index: public Py::PythonExtension<pymur_index> {
+class pymur_field_info: public Py::PythonExtension<pymur_field_info> {
 private:
-  Index *index;
+  int begin, end, id, ordinal, parentOrdinal;
+  long number;
 public:
-  bool loaded;
   static void init_type(void);
-  pymur_index(string location);
-  virtual ~pymur_index();
-  Py::Object docCount(const Py::Tuple &);
-  Py::Object termCountUnique(const Py::Tuple &);
-  Py::Object termCount(const Py::Tuple &);
-  Py::Object term(const Py::Tuple &);
-  Py::Object runQuery(const Py::Tuple &);
-  Py::Object document(const Py::Tuple &);
-
-  Py::Object docLength(const Py::Tuple &rargs);
-  Py::Object docLengthAvg(const Py::Tuple &rargs);
-
-  Py::Object fieldInfoList(const Py::Tuple &rargs);
-  Py::Object field(const Py::Tuple &rargs);
+  static pymur_field_info* fromFieldInfo(FieldInfo *fi);
+  pymur_field_info();
+  virtual ~pymur_field_info();
 
   // overwrite PythonExtension methods
   virtual Py::Object repr();
-  virtual Py::Object sequence_item(int i);
-  virtual int sequence_length();
+  virtual Py::Object getattr( const char *name );
 };

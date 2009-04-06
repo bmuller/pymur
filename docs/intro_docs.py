@@ -61,9 +61,16 @@ class IntroDocs:
         args = klassinfo[1:]
         instance = klass(*args)
         f.write("<ul>")
-        f.write("<li>%s</li>" % self.linkify(klass.__doc__))
+        f.write("<li>%s</li>" % self.boldify(self.linkify(klass.__doc__)))
         for method in dir(instance):
             logging.debug("handling method %s.%s" % (klassname, method))
             docs = getattr(instance, method).__doc__
-            f.write("<li>%s</li>" % self.linkify(docs))
+            f.write("<li>%s</li>" % self.boldify(self.linkify(docs)))
         f.write("</ul>")
+
+
+    def boldify(self, txt):
+        parts = txt.split(':')
+        if len(parts) > 1:
+            parts[0] = "<b>%s</b>" % parts[0]
+        return ":".join(parts)

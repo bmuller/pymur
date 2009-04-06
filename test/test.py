@@ -11,6 +11,7 @@ class PymurTestBase(unittest.TestCase):
         self.topdir = tempfile.mkdtemp()
         logging.debug("Just made temporary directory at %s" % self.topdir)
         self.index = "%s/%s" % (self.topdir, "index")
+        self.xmlfile = "./test/data/pubmed.xml"        
 
 
     def tearDown(self):
@@ -41,10 +42,9 @@ class PymurTestBase(unittest.TestCase):
 
 class TestIndexInfo(PymurTestBase):
     def testMetrics(self):
-        flocation = "./test/data/pubmed.xml"        
         ie = self.makeIndexEnvironment()
-        ie.addFile(flocation, "xml")
-        ie.addFile(flocation, "xml")
+        ie.addFile(self.xmlfile, "xml")
+        ie.addFile(self.xmlfile, "xml")
         ie.addString("this is some text", "txt")
         ie.close()
 
@@ -56,6 +56,21 @@ class TestIndexInfo(PymurTestBase):
         q = i.runQuery("some")
         self.failUnless(len(q) == 1)
         self.failUnless(q[0][0] == 3)
+
+    def testFields(self):
+        ie = self.makeIndexEnvironment(lambda ie: ie.setIndexedFields(["PMID"], "xml"))
+        ie.addFile(self.xmlfile, "xml")
+        ie.close()
+
+        i = self.makeIndex()
+        self.failUnless(i.field(1) == "pmid")
+
+        # there are two pmid fields in our xml document
+        info = i.fieldInfoList(1, 1)
+        self.failUnless(len(info) == 2)
+        # field id should be 1
+        self.failUnless(info[0].id == 1)
+
         
 
 class TestIndexing(PymurTestBase):
@@ -76,13 +91,11 @@ class TestIndexing(PymurTestBase):
         
 
     def testFileInput(self):
-        flocation = "./test/data/pubmed.xml"
-        
         ie = self.makeIndexEnvironment()
-        ie.addFile(flocation, "xml")
+        ie.addFile(self.xmlfile, "xml")
         ie.close()
 
-        f = open(flocation, 'r')
+        f = open(self.xmlfile, 'r')
         fcontents = f.read()
         f.close()
         
@@ -115,7 +128,7 @@ class TestMetadata(PymurTestBase):
 class TestFields(PymurTestBase):
     def testFileFields(self):
         ie = self.makeIndexEnvironment(lambda ie: ie.setIndexedFields(["PMID"], "xml"))
-        ie.addFile("./test/data/pubmed.xml", "xml")
+        ie.addFile(self.xmlfile, "xml")
         ie.close()
 
         qe = self.makeQueryEnvironment()

@@ -31,7 +31,9 @@ void pymur_index_environment::init_type() {
   add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<list of stopwords>)");
   add_varargs_method("setMemory", &pymur_index_environment::setMemory, "setMemory(<memory size in bytes>)");
   add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, 
-		     "setIndexedFields(<list of fields>, <text class>): where text class is one of txt, xml, html, ...");
+		     "setIndexedFields(<list of fields>, <text class>): Set which fields should be indexed for searches.  "
+		     "Text class should be one of txt, xml, html, ...  Note that this method must be called for any fields "
+		     "that you intend on searching within.");
   add_varargs_method("setStemmer", &pymur_index_environment::setStemmer, 
 		     "setStemmer(<stemmer name>): where stemmer name is porter or krovetz");
   add_varargs_method("setNormalization", &pymur_index_environment::setNormalization, 
