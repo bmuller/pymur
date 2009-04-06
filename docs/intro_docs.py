@@ -7,6 +7,7 @@ class IntroDocs:
         self.classes = classes
         self.filename = "%s/index.html" % outputdir
         self.classnames = [x[0].__name__ for x in self.classes]
+        self.classnames.sort()
 
 
     def makeDocs(self):
@@ -27,7 +28,11 @@ class IntroDocs:
             version = ".".join(map(lambda x: str(x), self.module.version))
         f.write("<html><head><title>%s %s Documentation</title></head>" % (modname, version))
         docs = self.linkify(self.module.__doc__)
-        f.write("<body><h1>%s %s Documentation</h1>%s: %s<br /><br />" % (modname, version, modname, docs)) 
+        f.write("<body><h1>%s %s Documentation</h1>%s: %s<br /><br />" % (modname, version, modname, docs))
+        f.write("<b>Classes:</b><br /><ul>")
+        for classname in self.classnames:
+            f.write("<li><a href=\"#%s\">%s</a></li>" % (classname, classname))
+        f.write("</ul><br /><br /><b>Class Documentation:</b>")
     
 
     def writeFooter(self, f):
