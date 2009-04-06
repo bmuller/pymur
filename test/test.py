@@ -33,6 +33,29 @@ class PymurTestBase(unittest.TestCase):
             f(ie)
         ie.create(self.index)
         return ie
+
+
+    def makeIndex(self):
+        return pymur.Index(self.index)
+
+
+class TestIndexInfo(PymurTestBase):
+    def testMetrics(self):
+        flocation = "./test/data/pubmed.xml"        
+        ie = self.makeIndexEnvironment()
+        ie.addFile(flocation, "xml")
+        ie.addFile(flocation, "xml")
+        ie.addString("this is some text", "txt")
+        ie.close()
+
+        i = self.makeIndex()
+        self.failUnless(len(i) == 3)
+        self.assertEqual(i.document(3, True), ['thi', 'is', 'some', 'text'])
+
+        # runQuery returns list of tuples - [(docid, score), ...]
+        q = i.runQuery("some")
+        self.failUnless(len(q) == 1)
+        self.failUnless(q[0][0] == 3)
         
 
 class TestIndexing(PymurTestBase):
