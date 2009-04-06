@@ -15,5 +15,9 @@ $> sh autogen.sh
 $> make
 $> sudo make install
 
+Then, if you'd like:
+$> make docs
+$> make test
 
 See https://projects.dbbe.musc.edu/trac/pymur for more information.
+

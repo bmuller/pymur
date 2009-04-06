@@ -1,0 +1,10 @@
+# See http://projects.dbbe.musc.edu/trac/pymur for 
+# instructions on SVN access for a full ChangeLog history.
+
+# All references to issues/bugs can be found at:
+# http://projects.dbbe.musc.edu/trac/pymur/ticket/<issue number>
+Dev Version
+	Have basic ability to create indexes, query indexes, and retrieve index information
+	Added tests and automatic documentation generator
+
+	
