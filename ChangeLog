@@ -3,7 +3,7 @@
 
 # All references to issues/bugs can be found at:
 # http://projects.dbbe.musc.edu/trac/pymur/ticket/<issue number>
-Dev Version
+0.0
 	Have basic ability to create indexes, query indexes, and retrieve index information
 	Added tests and automatic documentation generator
 
