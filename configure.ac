@@ -1,6 +1,6 @@
-AC_INIT([pymer], [0.0], [mullerb@musc.edu])
+AC_INIT([pymur], [0.0], [mullerb@musc.edu])
 AC_DEFINE([PACKAGE_URL],["http://projects.dbbe.musc.edu/trac/pymur"],[project url])
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER(pymur/config.h)
 AM_INIT_AUTOMAKE()
 
 AC_CONFIG_MACRO_DIR([acinclude.d])
@@ -56,19 +56,19 @@ int main() { lemur::retrieval::QnList l(); return 0; }],[
 
 AC_CONFIG_FILES([
  Makefile
- src/Makefile
+ pymur/Makefile
 ])
 AC_OUTPUT
 
 
 echo " ***"
-echo " *** You are now ready to build pymer"
+echo " *** You are now ready to build pymur"
 echo " *** Enter the following commands:"
 echo " ***"
 echo " *** $> make"
 echo " *** $> sudo make install"
 echo " ***"
-echo " *** Report bugs at http://projects.dbbe.musc.edu/trac/pymer"
+echo " *** Report bugs at http://projects.dbbe.musc.edu/trac/pymur"
 echo " *** Thanks for using free (as in speech and beer) software."
 echo " ***"
 echo

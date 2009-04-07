@@ -1,7 +1,7 @@
 import tempfile, shutil, sys, logging
 from intro_docs import IntroDocs
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s')
-sys.path.append("./src")
+sys.path.append("pymur")
 
 logging.debug("Importing pymur...")
 import pymur
