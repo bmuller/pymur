@@ -1,5 +1,5 @@
 SUBDIRS = src
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I acinclude.d
 
 test: all
 	${PYTHON} test/test.py

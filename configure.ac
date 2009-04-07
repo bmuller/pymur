@@ -3,7 +3,7 @@ AC_DEFINE([PACKAGE_URL],["http://projects.dbbe.musc.edu/trac/pymur"],[project ur
 AM_CONFIG_HEADER(src/config.h)
 AM_INIT_AUTOMAKE()
 
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([acinclude.d])
 
 AC_PROG_CXX
 AC_PROG_CXXCPP
