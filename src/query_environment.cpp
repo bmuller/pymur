@@ -29,6 +29,8 @@ void pymur_query_environment::init_type() {
 
   add_varargs_method("addIndex", &pymur_query_environment::addIndex, 
 		     "addIndex(<path to index>): must be called to specify index location");
+  add_varargs_method("addServer", &pymur_query_environment::addServer, "addServer(<hostname>): Add a remote server at the "
+		     "resolvable hostname to search.");
   add_varargs_method("close", &pymur_query_environment::close, "close(): close the environment");
   add_varargs_method("setScoringRules", &pymur_query_environment::setScoringRules, 
 		     "setScoringRules(<string list>): see Lemur examples for rule string format");
@@ -43,7 +45,11 @@ void pymur_query_environment::init_type() {
   add_varargs_method("documentMetadata", &pymur_query_environment::documentMetadata, 
 		     "documentMetadata(<list of document ids>, <attribute name>): Fetch the named metadata attribute "
 		     "for a list of document ids. Returns a list of string values.");
-}
+
+  add_varargs_method("fieldList", &pymur_query_environment::fieldList, "fieldList(): Get a list of fieldnames as strings.");
+  add_varargs_method("setMemory", &pymur_query_environment::setMemory, "setMemory(<memory size in bytes>): set max amount "
+		     "of memory to use when making queries.");
+};
 
 
 pymur_query_environment::pymur_query_environment() {
@@ -53,6 +59,36 @@ pymur_query_environment::pymur_query_environment() {
 
 pymur_query_environment::~pymur_query_environment() {
   delete env;
+};
+
+
+Py::Object pymur_query_environment::addServer(const Py::Tuple &rargs) {
+  ArgChecker("addServer", rargs).param(STRING).check();
+  string hostname = Py::String(rargs[0]).as_std_string();
+  try {
+    env->addServer(hostname);
+  } catch(lemur::api::Exception &e) {
+    throw Py::RuntimeError("Problem connecting to host \"" + hostname + "\": " + e.what());
+  }
+  return Py::None();
+};
+
+
+Py::Object pymur_query_environment::fieldList(const Py::Tuple &rargs) {
+  ArgChecker("fieldList", rargs).check();
+  vector<string> fields = env->fieldList();
+  Py::List pfields(fields.size());
+  for(int i=0; i<fields.size(); i++)
+    pfields[i] = Py::String(fields[i]);
+  return pfields;
+};
+
+
+Py::Object pymur_query_environment::setMemory(const Py::Tuple &rargs) {
+  ArgChecker("setMemory", rargs).param(NUMBER).check();
+  long mem = Py::Long(rargs[0]);
+  env->setMemory(INT64(mem));
+  return Py::None();
 };
 
 
