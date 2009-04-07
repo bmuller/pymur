@@ -1,16 +1,15 @@
 Prerequisites:
  * Python (http://python.org) >= 2.4 (as well as the Python header files)
  * Lemur (http://www.lemurproject.org)
- * Until there is a stable release, you will need the autotools as well (autoconf, automake, libtool) 
 
-Currently, when you make install Lemur a static library is installed. Pymur requires a dynamic library 
-for a number of reasons. Until Lemur ships with this option, you will need to first run a script to 
-create the dynamic library: 
+Currently, when you make install Lemur a static library is installed. Pymur can use either that static
+library, or, if you'd like, a dynamic library (this option is best if you intend on ever upgrading
+Lemur - so you don't have to recompile pymur).  This is not necessary, but recommended.
 
+To create a dynamic library:
 $> sudo ./make_shared_lemur.sh
 
-This should not affect any programs that link to lemur. At this point you can build and install pymur: 
-
+This should not affect any programs that were compiled with lemur. At this point you can build and install pymur: 
 $> sh autogen.sh 
 $> make
 $> sudo make install
