@@ -28,7 +28,7 @@ void pymur_index_environment::init_type() {
   behaviors().doc("indri IndexEnvironment");
   behaviors().supportRepr();
 
-  add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<list of stopwords>)");
+  add_varargs_method("setStopwords", &pymur_index_environment::setStopwords, "setStopwords(<list of stopwords>): Manually set stopwords.");
   add_varargs_method("setMemory", &pymur_index_environment::setMemory, "setMemory(<memory size in bytes>)");
   add_varargs_method("setIndexedFields", &pymur_index_environment::setIndexedFields, 
 		     "setIndexedFields(<list of fields>, <text class>): Set which fields should be indexed for searches.  "
