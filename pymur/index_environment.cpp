@@ -54,7 +54,7 @@ void pymur_index_environment::init_type() {
 		     "add a given string as the given class.  Accepts optional metadata dictionary - if given, make sure index "
 		     "was created with setMetadataIndexedFields called for the given metadata keys.");
 
-  add_varargs_method("create", &pymur_index_environment::create, "create(<location of new index>)");
+  add_varargs_method("create", &pymur_index_environment::create, "create(<location of new index>): Create new index");
   add_varargs_method("open", &pymur_index_environment::open, "open(<index location>): open index");
   add_varargs_method("close", &pymur_index_environment::close, "close(): close index");
 }
