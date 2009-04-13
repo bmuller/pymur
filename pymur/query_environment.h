@@ -37,6 +37,7 @@ public:
   Py::Object fieldList(const Py::Tuple &);
 
   Py::Object documents(const Py::Tuple &);
+  Py::Object documentCount(const Py::Tuple &);
   Py::Object documentsFromMetadata(const Py::Tuple &);
   Py::Object documentMetadata(const Py::Tuple &);
 

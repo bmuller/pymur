@@ -39,6 +39,9 @@ void pymur_query_environment::init_type() {
 
   add_varargs_method("documents", &pymur_query_environment::documents, 
 		     "documents(<list of document ids>): returns list of ParsedDocument objects");
+  add_varargs_method("documentCount", &pymur_query_environment::documentCount, 
+		     "documentCount([<term>]): returns either number of documents or number of documents that contain "
+		     "the optional term.");
   add_varargs_method("documentsFromMetadata", &pymur_query_environment::documentsFromMetadata, 
 		     "documentsFromMetadata(<attribute name>, <list of attribute values to match>): returns "
 		     " list of ParsedDocument objects");
@@ -59,6 +62,21 @@ pymur_query_environment::pymur_query_environment() {
 
 pymur_query_environment::~pymur_query_environment() {
   delete env;
+};
+
+
+Py::Object pymur_query_environment::documentCount(const Py::Tuple &rargs) {
+  ArgChecker("documentCount", rargs).oparam(STRING).check();
+
+  Py::Int result;
+  if (rargs.length() == 1) {
+    string term = Py::String(rargs[0]).as_std_string();
+    result = (int) env->documentCount(term);
+  } else {
+    result = (int) env->documentCount();
+  }
+
+  return result;
 };
 
 
