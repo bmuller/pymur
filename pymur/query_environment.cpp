@@ -34,6 +34,8 @@ void pymur_query_environment::init_type() {
   add_varargs_method("close", &pymur_query_environment::close, "close(): close the environment");
   add_varargs_method("setScoringRules", &pymur_query_environment::setScoringRules, 
 		     "setScoringRules(<string list>): see Lemur examples for rule string format");
+  add_varargs_method("setStopwords", &pymur_query_environment::setStopwords, 
+		     "setStopwords(<string list>): set stopwords to ignore when querying");
   add_varargs_method("runQuery", &pymur_query_environment::runQuery, 
 		     "runQuery(<query>, <max results>): run an indri query, returns list of ScoredExtentResult objects");
 
@@ -62,6 +64,21 @@ pymur_query_environment::pymur_query_environment() {
 
 pymur_query_environment::~pymur_query_environment() {
   delete env;
+};
+
+
+Py::Object pymur_query_environment::setStopwords(const Py::Tuple &rargs) {
+  ArgChecker("setStopwords", rargs).param(LIST).check();
+
+  vector<string> stopwords;
+  Py::Sequence s = rargs[0];
+  for(unsigned int i=0; i<s.length(); i++) {
+    if(!s[i].isString())
+      throw Py::RuntimeError("setStopwords takes an array of stopwords");
+    stopwords.push_back(Py::String(s[i]).as_std_string());
+  }
+  env->setStopwords(stopwords);
+  return Py::None();
 };
 
 

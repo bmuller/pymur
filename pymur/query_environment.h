@@ -31,6 +31,7 @@ public:
   Py::Object addServer(const Py::Tuple &);
   Py::Object close(const Py::Tuple &);
   Py::Object setScoringRules(const Py::Tuple &);
+  Py::Object setStopwords(const Py::Tuple &);
   Py::Object runQuery(const Py::Tuple &);
 
   Py::Object setMemory(const Py::Tuple &);
