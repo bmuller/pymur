@@ -70,7 +70,6 @@ class TestIndexInfo(PymurTestBase):
         self.failUnless(len(info) == 2)
         # field id should be 1
         self.failUnless(info[0].id == 1)
-
         
 
 class TestIndexing(PymurTestBase):
@@ -123,7 +122,24 @@ class TestMetadata(PymurTestBase):
 
         docs = qe.documentsFromMetadata("title", ["test one", "test two"])
         self.failUnless(len(docs) == 2)
+        qe.close()
 
+
+    def testIDFetch(self):
+        ie = self.makeIndexEnvironment(lambda ie: ie.setMetadataIndexedFields(['title'], ['title']))
+        ie.addString("this is the string one that is a long string", "txt", {'title': "test one"})
+        ie.addString("this is the string two that has words like the an a", "txt", {'title': "test two"})
+        ie.close()
+
+        qe = self.makeQueryEnvironment()
+        first = qe.documentIDsFromMetadata('title', ["test one"])
+        second = qe.documentIDsFromMetadata('title', ["test one", "test two"])
+        self.failUnless(first == [1])
+        second.sort()
+        self.failUnless(second == [1,2])
+        qe.close()
+
+        
 
 class TestFields(PymurTestBase):
     def testFileFields(self):

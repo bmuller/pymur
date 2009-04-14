@@ -40,6 +40,7 @@ public:
   Py::Object documents(const Py::Tuple &);
   Py::Object documentCount(const Py::Tuple &);
   Py::Object documentsFromMetadata(const Py::Tuple &);
+  Py::Object documentIDsFromMetadata(const Py::Tuple &);
   Py::Object documentMetadata(const Py::Tuple &);
 
   // overwrite PythonExtension methods

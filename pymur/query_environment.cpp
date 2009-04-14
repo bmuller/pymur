@@ -47,6 +47,9 @@ void pymur_query_environment::init_type() {
   add_varargs_method("documentsFromMetadata", &pymur_query_environment::documentsFromMetadata, 
 		     "documentsFromMetadata(<attribute name>, <list of attribute values to match>): returns "
 		     " list of ParsedDocument objects");
+  add_varargs_method("documentIDsFromMetadata", &pymur_query_environment::documentIDsFromMetadata, 
+		     "documentIDsFromMetadata(<attribute name>, <list of attribute values to match>): returns "
+		     " list of document ids");
   add_varargs_method("documentMetadata", &pymur_query_environment::documentMetadata, 
 		     "documentMetadata(<list of document ids>, <attribute name>): Fetch the named metadata attribute "
 		     "for a list of document ids. Returns a list of string values.");
@@ -201,6 +204,27 @@ Py::Object pymur_query_environment::documentsFromMetadata(const Py::Tuple &rargs
   Py::List result((int) docs.size());
   for(int i=0; i<docs.size(); i++) 
     result[i] = Py::asObject(pymur_parsed_document::fromParsedDocument(docs[i]));
+  
+  return result;
+};
+
+
+Py::Object pymur_query_environment::documentIDsFromMetadata(const Py::Tuple &rargs) {
+  ArgChecker("documentIDsFromMetadata", rargs).param(STRING).param(LIST).check();
+  string name = Py::String(rargs[0]).as_std_string();
+  Py::List pvalues(rargs[1]);
+  vector<string> values;
+  for (int i=0; i<pvalues.length(); i++) {
+    if(!pvalues[i].isString())
+      throw Py::RuntimeError("documentIDsFromMetadata takes a list of strings as the second argument");
+    values.push_back(Py::String(pvalues[i]).as_std_string());
+  };
+
+  vector<int> docs = env->documentIDsFromMetadata(name, values);
+
+  Py::List result((int) docs.size());
+  for(int i=0; i<docs.size(); i++) 
+    result[i] = Py::Int(docs[i]);
   
   return result;
 };
