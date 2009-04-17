@@ -18,6 +18,9 @@ AC_PYTHON_DEVEL([>='2.4'])
 
 AC_SUBST([PYTHON])
 
+# This is needed for pycxx
+AC_CHECK_HEADER([map], [CPPFLAGS="$CPPFLAGS -DPYCXX_USING_STD_MAP"])
+
 # provide flag --enable-debug
 AC_ARG_ENABLE(debug, AC_HELP_STRING([[--enable-debug]], [enable debugging output to stdout]),
 [if test "$enableval" = "yes"; then
@@ -53,9 +56,14 @@ int main() { lemur::retrieval::QnList l(); return 0; }],[
   AC_MSG_FAILURE([Could not find the lemur library.])
 ])
 
-
+# due to Lemur's project leaders not including a simple dang pkg-config file, I have to include the following lines:
 AC_CHECK_FUNCS(mkstemp)
 AC_CHECK_FUNCS(mkstemps)
+AC_CHECK_LIB(z, deflate)
+AC_CHECK_LIB(m, log)
+AC_CHECK_LIB(pthread, pthread_create)
+AC_DEFINE(HAVE_EXT_ATOMICITY_H, 1, [define if ext/atomicity.h exists])
+AC_DEFINE(P_NEEDS_GNU_CXX_NAMESPACE, 1, [define if we have GNU C++ namespace support])
 
 
 AC_CONFIG_FILES([
