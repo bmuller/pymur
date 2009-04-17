@@ -54,6 +54,10 @@ int main() { lemur::retrieval::QnList l(); return 0; }],[
 ])
 
 
+AC_CHECK_FUNCS(mkstemp)
+AC_CHECK_FUNCS(mkstemps)
+
+
 AC_CONFIG_FILES([
  Makefile
  pymur/Makefile
