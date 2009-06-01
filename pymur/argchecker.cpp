@@ -53,6 +53,9 @@ void ArgChecker::paramTypeToString(ParamType t, string &s) {
     s = "<string>";
     break;
   case LIST:
+    s = "<list>";
+    break;
+  case SEQUENCE:
     s = "<sequence>";
     break;
   case BOOL:
@@ -99,6 +102,9 @@ bool ArgChecker::right_type(Py::seqref<Py::Object> obj, ParamType t) {
     break;
   case LIST:
     result = obj.isList();
+    break;
+  case SEQUENCE:
+    result = obj.isSequence();
     break;
   case DICT:
     result = obj.isDict();

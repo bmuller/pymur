@@ -17,7 +17,7 @@
 */
 
 
-enum ParamType { NUMBER, STRING, LIST, BOOL, DICT };
+enum ParamType { NUMBER, STRING, LIST, BOOL, DICT, SEQUENCE };
 
 class ArgChecker {
  private:

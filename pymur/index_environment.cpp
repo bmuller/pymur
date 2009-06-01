@@ -81,7 +81,7 @@ Py::Object pymur_index_environment::documentsSeen(const Py::Tuple &rargs) {
 
 
 Py::Object pymur_index_environment::setStopwords(const Py::Tuple &rargs) {
-  ArgChecker("setStopwords", rargs).param(LIST).check();
+  ArgChecker("setStopwords", rargs).param(SEQUENCE).check();
   
   vector<string> stopwords;
   Py::Sequence s = rargs[0];
