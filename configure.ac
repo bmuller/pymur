@@ -57,6 +57,7 @@ int main() { lemur::retrieval::QnList l(); return 0; }],[
 ])
 
 # due to Lemur's project leaders not including a simple dang pkg-config file, I have to include the following lines:
+AC_CHECK_LIB(iberty, mkstemps)
 AC_CHECK_FUNCS(mkstemp)
 AC_CHECK_FUNCS(mkstemps)
 AC_CHECK_LIB(z, deflate)
